@@ -1,5 +1,115 @@
-import React from 'react'
+import React, { useEffect, useState, useRef } from 'react'
+
+import ReactPaginate from "react-paginate";
+import { compareAsc, format } from 'date-fns'
+import { Link } from 'react-router-dom';
+
+import fileDownload from 'js-file-download';
+import downloadjs from 'downloadjs';
+
 function DashboardComp() {
+    let SERVER_URL = process.env.REACT_APP_BASE_URL;
+    let FORM_URL = process.env.REACT_APP_BASE_URL_FORM;
+    let token = JSON.parse(localStorage.getItem('key'));
+    // alert(FORM_URL)
+    const pagination = useRef();
+    const [opnperPage, setOpnperPage] = useState();
+    const [opnlist, setOpnlist] = useState([]);
+    const [opntotalitem, setTotalitem] = useState();
+
+    const formpagination = useRef();
+    const [formlistPerPage, setFormlistPerPage] = useState();
+    const [formlist, setFormlist] = useState([]);
+    const [formlistTotalitem, setFormlistTotalitem] = useState();
+
+
+    const setPageopening = ({ selected }) => {
+        getOpening(selected + 1);
+    }
+    const setPageform = ({ selected }) => {
+        getForm(selected + 1);
+    }
+    useEffect(() => {
+        getOpening()
+        getForm()
+        getCircular()
+    }, [])
+    const getCircular = async () => {
+        // const response = await fetch(SERVER_URL + `api/dashboard_forms?page=${pagenumber}`,
+        //     {
+        //         method: 'GET',
+        //         headers: {
+        //             'Accept': 'application/json',
+        //             'Content-Type': 'application/json',
+        //             'authorization': `bearer ${token.value}`
+        //         },
+        //     })
+    }
+    const getForm = async (pagenumber) => {
+        const response = await fetch(SERVER_URL + `api/dashboard_forms?page=${pagenumber}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'authorization': `bearer ${token.value}`
+                },
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                setFormlist(data.result)
+                setFormlistTotalitem(data.nbPages);
+                setFormlistPerPage(data.limit)
+            });
+    }
+
+    const getOpening = async (pagenumber) => {
+
+
+        const response = await fetch(SERVER_URL + `api/dashboard_opening?page=${pagenumber}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'authorization': `bearer ${token.value}`
+                },
+            })
+            .then(res => res.json())
+            .then(data => {
+                setOpnlist(data.result)
+                setTotalitem(data.nbPages);
+                setOpnperPage(data.limit)
+            });
+    }
+    const downloadImage = async (downloadPath) => {
+        alert(downloadPath);
+        let SERVER_URL = process.env.REACT_APP_BASE_URL;
+        let token = JSON.parse(localStorage.getItem('key'));
+
+
+        const response = await fetch(SERVER_URL + `api/download_files`,
+            //  console.log(response);
+            {
+                method: 'GET',
+                resposType: 'blob',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'authorization': `bearer ${token.value}`
+                }
+            }).then(res => {
+                // const blob =  res.blob();
+                console.log(res);
+                downloadjs('1670406957087_1.png');
+            })
+
+
+
+
+    }
+
     return (
         <div className="row-bg">
             <div className="row">
@@ -239,54 +349,49 @@ function DashboardComp() {
                     <div className="white_box1">
                         <h3>Forms</h3>
                         <div className="circular_wrp">
-                            <div className="circular_blk">
-                                <div className="row">
-                                    <div className="col-md-4">
-                                        <div className="ttl">Form Name</div>
-                                        <div className="ttl_name">XXXXXX</div>
+                            {
+                                formlist.map((item, ind) => {
+
+                                    return <div key={ind} className="circular_blk">
+                                        <div className="row">
+                                            <div className="col-md-4">
+                                                <div className="ttl">{item.title}</div>
+                                                <div className="ttl_name">Form Title</div>
+                                            </div>
+                                            <div className="col-md-4">
+                                                <div className="ttl"> {format(new Date(item.created_on), "MMM dd, yyyy")}</div>
+                                                <div className="ttl_name">Upload on</div>
+                                            </div>
+                                            <div className="col-md-4 text-end">
+                                                <Link className="btn_1" download target="_blank" to={`//${FORM_URL + item.img}`} >Download</Link>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="col-md-4">
-                                        <div className="ttl">Sep 15, 2022</div>
-                                        <div className="ttl_name">Upload on</div>
-                                    </div>
-                                    <div className="col-md-4 text-end">
-                                        <button className="btn_1">Download</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="circular_blk">
-                                <div className="row">
-                                    <div className="col-md-4">
-                                        <div className="ttl">Form Name</div>
-                                        <div className="ttl_name">XXXXXX</div>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <div className="ttl">Sep 15, 2022</div>
-                                        <div className="ttl_name">Upload on</div>
-                                    </div>
-                                    <div className="col-md-4 text-end">
-                                        <button className="btn_1">Download</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="circular_blk">
-                                <div className="row">
-                                    <div className="col-md-4">
-                                        <div className="ttl">Form Name</div>
-                                        <div className="ttl_name">XXXXXX</div>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <div className="ttl">Sep 15, 2022</div>
-                                        <div className="ttl_name">Upload on</div>
-                                    </div>
-                                    <div className="col-md-4 text-end">
-                                        <button className="btn_1">Download</button>
-                                    </div>
-                                </div>
-                            </div>
+                                })
+                            }
+                            {/* <div className="circular_blk"></div> */}
                         </div>
                         <div className="view_all">
-                            View All <img src="assets/images/arrow_icon.png" />
+
+                            <ReactPaginate
+                                ref={pagination}
+                                pageCount={Math.ceil(formlistTotalitem / formlistPerPage)}
+                                pageRangeDisplayed={0}
+                                marginPagesDisplayed={0}
+                                onPageChange={setPageform}
+                                containerClassName="pagination"
+                                activeClassName="active"
+                                pageLinkClassName="page-link"
+                                breakLinkClassName="page-link"
+                                nextLinkClassName="page-link"
+                                previousLinkClassName="page-link"
+                                pageClassName="page-item"
+                                breakClassName="page-item"
+                                nextClassName="page-item"
+                                previousClassName="page-item"
+                                previousLabel={<>&laquo;</>}
+                                nextLabel={<>&raquo;</>}
+                            />
                         </div>
                     </div>
 
@@ -294,36 +399,41 @@ function DashboardComp() {
                     <div className="white_box1">
                         <h3>Openings</h3>
                         <ul className="open_listing_wrp">
-                            <li className="open_listing_blk">
-                                <span className="btn_blue">Development</span>
-                                <div className="open_ttl">
-                                    19844- Front-end Developer - Web Apps - React.js/Node.js/JavaScript
-                                </div>
-                                <div className="open_date">
-                                    <img src="assets/images/dateline.png" alt="" className="mr05" /> 03 Nov, 2020
-                                </div>
-                            </li>
-                            <li className="open_listing_blk">
-                                <span className="btn_green">Editorial</span>
-                                <div className="open_ttl">
-                                    19845- Editorial Assistant Manager
-                                </div>
-                                <div className="open_date">
-                                    <img src="assets/images/dateline.png" alt="" className="mr05" /> 05 Nov, 2020
-                                </div>
-                            </li>
-                            <li className="open_listing_blk">
-                                <span className="btn_red">Accounts</span>
-                                <div className="open_ttl">
-                                    19848- Chartered Accountant- Controllership
-                                </div>
-                                <div className="open_date">
-                                    <img src="assets/images/dateline.png" alt="" className="mr05" /> 08 Nov, 2020
-                                </div>
-                            </li>
+                            {
+                                opnlist.map((item, ind) => {
+                                    return <li key={ind} className="open_listing_blk">
+                                        <span className="btn_blue">{item.dept_name}</span>
+                                        <div className="open_ttl">
+                                            {item.opening}- {item.role_name} - {item.title}
+                                        </div>
+                                        <div className="open_date">
+                                            <img src="assets/images/dateline.png" alt="" className="mr05" /> 03 Nov, 2020
+                                        </div>
+                                    </li>
+                                })}
                         </ul>
                         <div className="view_all">
-                            View All <img src="assets/images/arrow_icon.png" />
+                            {/* View All <img src="assets/images/arrow_icon.png" />
+                            <h1 onClick={e => pagination.current.setState({ selected: 10 - 1 })} ></h1> */}
+                            <ReactPaginate
+                                ref={pagination}
+                                pageCount={Math.ceil(opntotalitem / opnperPage)}
+                                pageRangeDisplayed={0}
+                                marginPagesDisplayed={0}
+                                onPageChange={setPageopening}
+                                containerClassName="pagination"
+                                activeClassName="active"
+                                pageLinkClassName="page-link"
+                                breakLinkClassName="page-link"
+                                nextLinkClassName="page-link"
+                                previousLinkClassName="page-link"
+                                pageClassName="page-item"
+                                breakClassName="page-item"
+                                nextClassName="page-item"
+                                previousClassName="page-item"
+                                previousLabel={<>&laquo;</>}
+                                nextLabel={<>&raquo;</>}
+                            />
                         </div>
                     </div>
 

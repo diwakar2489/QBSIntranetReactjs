@@ -56,6 +56,7 @@ function SidebarComp() {
                                 <img src="assets/images/setting.png" alt="" /> Circulars
                             </Link>
                         </li>
+                       
 
 
 
@@ -84,6 +85,12 @@ function SidebarComp() {
                             <span></span>
                             <Link className="nav-link" aria-current="page" to="/messagelist">
                                 <img src="assets/images/dashboard_msg.png" alt="" /> Dashboard Message
+                            </Link>
+                        </li>
+                        <li className={`nav-item  ${pathname.match('/circularlist') ? 'active' : ''} ${pathname.match('/addcircular') ? 'active' : ''}`}>
+                            <span></span>
+                            <Link className="nav-link" aria-current="page" to="/userlist">
+                                <img src="assets/images/setting.png" alt="" /> Login
                             </Link>
                         </li>
                     </ul>

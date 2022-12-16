@@ -32,6 +32,7 @@ function LoginComp() {
 
 
     const Userlogin = () => {
+      //alert(SERVER_URL)
         const fetchData = async () => {
             const response = await fetch(SERVER_URL + `api/login`,
                 {
@@ -47,8 +48,7 @@ function LoginComp() {
                 })
                 .then(res => res.json())
                 .then(data => {
-                    const tokenDecoded = jwt_decode(data.accessToken)
-                    //console.log(tokenDecoded);
+                    const tokenDecoded = jwt_decode(data.accessToken)                  
                     if (data.status == true) {
                         const tokenDecoded = jwt_decode(data.accessToken)
                         const item = {

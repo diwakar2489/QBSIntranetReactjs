@@ -1,10 +1,18 @@
 $(document).ready(function() {
-  $('.btn').on('click', function() {
+  $('.upload_btn').on('click', function() {
     $('.file').trigger('click');
   });
 
   $('.file').on('change', function() {
     var fileName = $(this)[0].files[0].name;    
     $('#file-name').val(fileName);
+  });
+   $(".yes_blk").click(function(){
+    $(".yes_blk").addClass("active");
+    $(".no_blk").removeClass("active");
+  });
+  $(".no_blk").click(function(){
+    $(".yes_blk").removeClass("active");
+    $(".no_blk").addClass("active");
   });
 })

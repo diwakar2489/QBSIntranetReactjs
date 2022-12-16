@@ -79,16 +79,29 @@ function FormListComp() {
                     }
                 </tbody>
                 <tfoot>
-                    <tr>
-                        <td colSpan="6" className="text-end">
-                            <div className="pag_text">1-10 of 50</div>
-                            <div className="pagnation">
-                                <img src="assets/images/previous.png" />
-                                <img src="assets/images/next.png" />
-                            </div>
-                        </td>
-                    </tr>
-                </tfoot>
+                <tr><td colSpan="8" >
+                    <h1 onClick={e => pagination.current.setState({ selected: 10 - 1 })} ></h1>
+                    <ReactPaginate
+                        ref={pagination}
+                        pageCount={Math.ceil(totalitem / perPage)}
+                        pageRangeDisplayed={4}
+                        marginPagesDisplayed={1}
+                        onPageChange={setPage}
+                        containerClassName="pagination"
+                        activeClassName="active"
+                        pageLinkClassName="page-link"
+                        breakLinkClassName="page-link"
+                        nextLinkClassName="page-link"
+                        previousLinkClassName="page-link"
+                        pageClassName="page-item"
+                        breakClassName="page-item"
+                        nextClassName="page-item"
+                        previousClassName="page-item"
+                        previousLabel={<>&laquo;</>}
+                        nextLabel={<>&raquo;</>}
+                    />
+                </td></tr>
+            </tfoot>
             </table>
 
 

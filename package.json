@@ -2,7 +2,7 @@
   "name": "qbsintranet",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://intranet.qbslearning.com/",
+  "homepage": "https://intranet.qbslearning.com",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -11,6 +11,8 @@
     "axios": "^1.2.0",
     "build": "^0.1.4",
     "date-fns": "^2.29.3",
+    "downloadjs": "^1.4.7",
+    "js-file-download": "^0.4.12",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.4",

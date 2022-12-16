@@ -73,9 +73,9 @@ function JobOpeningListComp() {
 
                             </td>
                             <td className="text-end">
-                            <button class="btn-style1">
+                            <Link to={'/editopening?id='+item.id} class="btn-style1">
 										<i class="fa fa-edit mr03"></i> Edit
-									</button>
+									</Link>
                         </td>
                         </tr>
                     ))}
